@@ -11,6 +11,7 @@
 """Marc21 Celery tasks."""
 
 from celery import shared_task
+from flask import current_app
 from flask_principal import Identity
 from invenio_access.permissions import any_user, authenticated_user, system_process
 from invenio_records_resources.services.records.results import RecordItem
@@ -39,3 +40,8 @@ def create_marc21_record(data: dict, access: dict) -> RecordItem:
     record = service.publish(id_=draft.id, identity=system_identity())
 
     return record
+
+@shared_task(ignore_result=True)
+def validate_marc21_dois():
+    current_app.logger.info("Starting DOI validation for Marc21 records...")
+    return #?
